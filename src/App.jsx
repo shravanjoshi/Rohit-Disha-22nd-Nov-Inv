@@ -9,7 +9,7 @@ import cocktailCard from '../sangeet.png';
 import baraatCard from '../baraat.png';
 import phereCard from '../phere.webp';
 import sufiCard from '../sufi.webp';
-import afterPartyCard from '../after-party.webp';
+import afterPartyCard from '../after-party.png';
 import familiesBackground from '../families-bg.webp';
 import storyBackground from '../story-bg.webp';
 import scheduleBackground from '../schedule-bg.webp';
@@ -659,7 +659,6 @@ export default function WeddingInvitation() {
             <div className="mx-auto grid max-w-6xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
               {[
                 [baraatCard, 'Baraat on Wheels'],
-                [phereCard, 'Phere'],
                 [afterPartyCard, 'After Party']
               ].map(([image, title]) => (
                 <FadeInSection key={title} delay={100}>
