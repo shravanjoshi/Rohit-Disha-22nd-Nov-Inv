@@ -7,7 +7,7 @@ import weddingEmblem from '../R_D.png';
 import haldiCard from '../haldi.png';
 import cocktailCard from '../sangeet.png';
 import baraatCard from '../baraat.png';
-import phereCard from '../phere.webp';
+import phereCard from '../phere.png';
 import sufiCard from '../sufi.webp';
 import afterPartyCard from '../after-party.png';
 import familiesBackground from '../families-bg.webp';
@@ -15,22 +15,37 @@ import storyBackground from '../story-bg.webp';
 import scheduleBackground from '../schedule-bg.webp';
 import rsvpBackground from '../footer-bg.png';
 import backgroundMusic from '../bg-music.mp3';
+import storyPhoto1 from '../our-sotry-1.jpeg';
+import storyPhoto2 from '../our-story-2.jpeg';
+import storyPhoto3 from '../our-story-3.jpeg';
+import storyPhoto4 from '../our-story-4.jpeg';
+import storyPhoto5 from '../our-story-5.jpeg';
 
 const STORY_CHAPTERS = [
   {
-    image: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=600&q=80',
+    image: storyPhoto1,
     caption: 'Every journey led us here',
     alt: 'Couple celebrating their love'
   },
   {
-    image: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=600&q=80',
+    image: storyPhoto2,
     caption: 'From craziness to forever',
     alt: 'Couple sharing a joyful moment'
   },
   {
-    image: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=600&q=80',
+    image: storyPhoto3,
     caption: 'We wrote our story.',
     alt: 'Couple on their wedding day'
+  },
+  {
+    image: storyPhoto4,
+    caption: 'Together through every chapter',
+    alt: 'Couple sharing a special moment'
+  },
+  {
+    image: storyPhoto5,
+    caption: 'Our forever begins here',
+    alt: 'Couple celebrating together'
   }
 ];
 
@@ -218,7 +233,14 @@ export default function WeddingInvitation() {
     return () => clearInterval(interval);
   }, []);
 
-  const fadeInMusic = () => {
+
+  useEffect(() => () => {
+    if (volumeFadeRef.current) {
+      window.clearInterval(volumeFadeRef.current);
+    }
+  }, []);
+
+   const fadeInMusic = () => {
     const music = musicRef.current;
     if (!music) return;
 
@@ -242,18 +264,13 @@ export default function WeddingInvitation() {
     }, 100);
   };
 
-  useEffect(() => () => {
-    if (volumeFadeRef.current) {
-      window.clearInterval(volumeFadeRef.current);
-    }
-  }, []);
-
   const startMusic = async () => {
-    if (!musicRef.current) return;
+    const music = musicRef.current;
+    if (!music || !music.paused) return;
 
     try {
-      musicRef.current.volume = 0;
-      await musicRef.current.play();
+      music.volume = 0;
+      await music.play();
       setIsMusicPlaying(true);
       shouldResumeMusicRef.current = true;
       fadeInMusic();
@@ -264,8 +281,8 @@ export default function WeddingInvitation() {
   };
 
   useEffect(() => {
-    if (intro === 'done') startMusic();
-  }, [intro]);
+    startMusic();
+  }, []);
 
   useEffect(() => {
     const pauseForInactiveWindow = () => {
@@ -337,16 +354,7 @@ export default function WeddingInvitation() {
     if (!musicRef.current) return;
 
     if (musicRef.current.paused) {
-      try {
-        musicRef.current.volume = 0;
-        await musicRef.current.play();
-        setIsMusicPlaying(true);
-        shouldResumeMusicRef.current = true;
-        fadeInMusic();
-      } catch (error) {
-        console.error('Background music could not start:', error);
-        setIsMusicPlaying(false);
-      }
+      await startMusic();
       return;
     }
 
@@ -404,6 +412,7 @@ export default function WeddingInvitation() {
         }`}>
         {intro !== 'done' && (
           <EnvelopeIntro
+            onOpen={startMusic}
             onDone={() => {
               setIntro('revealing');
             }}
@@ -659,7 +668,8 @@ export default function WeddingInvitation() {
             <div className="mx-auto grid max-w-6xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
               {[
                 [baraatCard, 'Baraat on Wheels'],
-                [afterPartyCard, 'After Party']
+                [afterPartyCard, 'After Party'],
+                [phereCard, 'Phere'],
               ].map(([image, title]) => (
                 <FadeInSection key={title} delay={100}>
                   <article className="overflow-hidden rounded-[4px] bg-black p-1 shadow-[0_8px_14px_rgba(47,35,20,0.28)] transition-transform duration-300 hover:-translate-y-1">
@@ -841,7 +851,15 @@ export default function WeddingInvitation() {
         </div>
 
         {/* --- 9. MUSIC CONTROLS (Fixed to Mobile Wrapper) --- */}
-        <audio ref={musicRef} src={backgroundMusic} loop preload="auto" aria-hidden="true" />
+        <audio
+          ref={musicRef}
+          src={backgroundMusic}
+          autoPlay
+          loop
+          preload="auto"
+          onCanPlay={startMusic}
+          aria-hidden="true"
+        />
         <div className="fixed bottom-4 right-4 z-40 sm:bottom-6 sm:right-6">
           <button
             onClick={toggleMusic}

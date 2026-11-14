@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import envelopeVideo from '../envelope.mp4';
 import introBackground from '../intro-bg.jpg';
 
-export default function EnvelopeIntro({ onDone }) {
+export default function EnvelopeIntro({ onDone, onOpen }) {
   const videoRef = useRef(null);
   const [phase, setPhase] = useState('closed'); // closed | playing | finished | error
 
@@ -13,6 +13,7 @@ export default function EnvelopeIntro({ onDone }) {
     if (!video) return;
 
     setPhase('playing');
+    onOpen?.();
     try {
       await video.play();
     } catch (error) {
@@ -42,6 +43,7 @@ export default function EnvelopeIntro({ onDone }) {
           phase === 'playing' || phase === 'finished' ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
         playsInline
+        muted
         preload="auto"
         onEnded={handleVideoEnd}
         onError={() => setPhase('error')}
