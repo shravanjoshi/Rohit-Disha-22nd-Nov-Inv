@@ -796,15 +796,6 @@ export default function WeddingInvitation() {
             ></div>
 
             <FadeInSection>
-              <div className="flex min-h-[214px] flex-col items-center justify-center  px-6 py-12">
-                <h2 className="font-['Great_Vibes',_cursive] font-medium text-4xl text-[#93631f] sm:text-5xl">
-                  Your Presence is Our Present
-                </h2>
-                <p className="font-['Cormorant_Garamond',_serif] font-medium mt-2 text-base tracking-wide text-[#4f4033] sm:text-lg">
-                  No Gifts, only blessings!
-                </p>
-                <div className="mt-5 text-[10px] text-[#b85f55]" aria-hidden="true">♥</div>
-              </div>
 
               <div className="relative overflow-hidden  px-6 py-24 sm:py-28">
                 <div className="pointer-events-none absolute -left-20 bottom-0 h-72 w-72 rounded-full bg-[#dfe5df]/25 blur-3xl" aria-hidden="true"></div>
